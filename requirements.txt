@@ -1,0 +1,4 @@
+pytest
+cvxpy==1.0.31
+bokeh==2.0.2
+
