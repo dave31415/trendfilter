@@ -2,4 +2,7 @@
 venv
 .venv
 __pychache__
+build/
+dist/
+trendfilter.egg-info/
 

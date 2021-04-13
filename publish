@@ -1,0 +1,6 @@
+#!/bin/bash
+rm -rf build/ dist/ trendfilter.egg-info/
+pip install --upgrade setuptools wheel twine
+python3 setup.py sdist bdist_wheel
+twine upload dist/*
+

@@ -83,34 +83,6 @@ def trend_filter(x, y, y_err=None, alpha_2=0.0,
         return y_fit
 
 
-def test_mono(noise=0.2, **kwargs):
-    """
-    Test trend filter model code
-    :param noise: noise level
-    :param kwargs: all other args for trend_filter
-    :return:
-    """
-    np.random.seed(420)
-    x = np.linspace(0, 10, 80)
-    n = len(x)
-    y = np.sqrt(x)
-    y_noisy = y + noise * np.random.randn(n)
-    y_noisy[20] += 3
-    y_fit = trend_filter(x, y_noisy, **kwargs)
-    plot = figure()
-    plot.circle(x, y_noisy)
-    plot.line(x, y_noisy)
-
-    plot.line(x, y_fit, color='red')
-
-    f = interp1d(x, y_fit, fill_value="extrapolate")
-
-    xx = np.linspace(x.min() - 1, x.max() + 2, 100)
-    plot.line(xx, f(xx), color='green', line_dash='dashed')
-
-    show(plot)
-
-
 def get_reg(x, y_var, l_norm, alpha_0, alpha_1, alpha_2):
     """
     Get the regularization term
