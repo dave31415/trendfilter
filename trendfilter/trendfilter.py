@@ -17,7 +17,7 @@ def cumulative_matrix(n):
 
 def trend_filter(x, y, y_err=None, alpha_2=0.0,
                  alpha_1=0.0, alpha_0=0.0, l_norm=2,
-                 constrain_zero=False, monotonic=True,
+                 constrain_zero=False, monotonic=False,
                  return_function=False):
     """
     :param x: The x-value, numpy array

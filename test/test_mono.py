@@ -9,12 +9,15 @@ show_plot = True
 def test_mono():
     noise = 0.2
     np.random.seed(420)
+
     x = np.linspace(0, 10, 80)
     n = len(x)
     y = np.sqrt(x)
     y_noisy = y + noise * np.random.randn(n)
     y_noisy[20] += 3
-    y_fit = trend_filter(x, y_noisy)
+
+    y_fit = trend_filter(x, y_noisy, monotonic=True)
+
     plot = figure()
     plot.circle(x, y_noisy)
     plot.line(x, y_noisy)
