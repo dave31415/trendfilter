@@ -1,4 +1,9 @@
-show_plot = False
+import numpy as np
+from trendfilter import trend_filter
+from bokeh.plotting import figure, show
+from scipy.interpolate import interp1d
+
+show_plot = True
 
 
 def test_mono():
@@ -9,7 +14,7 @@ def test_mono():
     y = np.sqrt(x)
     y_noisy = y + noise * np.random.randn(n)
     y_noisy[20] += 3
-    y_fit = trend_filter(x, y_noisy, **kwargs)
+    y_fit = trend_filter(x, y_noisy)
     plot = figure()
     plot.circle(x, y_noisy)
     plot.line(x, y_noisy)
