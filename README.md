@@ -1,5 +1,24 @@
-# trendfilter
-Trend filtering
+# trendfilter: 
+
+Trend filtering is about building a model for a 1D time series
+that has some nice properties such as smoothness or sparse 
+changes in slopes (piecewise linear).
+
+The objective to be minimized is, in our case, Huber loss with
+regularization on 1st, 2nd or 3rd derivative plus some constraints. 
+Can be either L1 or L2 norms for regularization.
+
+This library provides a flexible and powerful 
+python function to do this and is built on top of the 
+cvxpy optimization library.
+
+# Install
+
+pip install trendfilter
+
+or clone the repo. 
+
+# Examples: 
 
 Contruct some x, y data where there is noise as well as few 
 outliers. See 
