@@ -1,4 +1,4 @@
 pytest
 cvxpy
-bokeh==2.0.2
+bokeh
 

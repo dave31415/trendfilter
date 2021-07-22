@@ -1,8 +1,9 @@
 .idea/
 venv
 .venv
-__pychache__
+**/__pycache__
 build/
 dist/
 trendfilter.egg-info/
+trendfilter/__pycache__/
 
