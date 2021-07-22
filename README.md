@@ -40,15 +40,15 @@ y_fit = trend_filter(x, y_noisy, monotonic=True)
 
 ![MonoModel](./plots/bokeh_plot_best_mono.png)
 
-The green line, by the way, just shows that the function can extrapolate 
+The green line, by the way, just shows that the function can be extrapolated 
 which is a very useful thing, for example, if you want to make predictions
 about the future.
 
-Ok, now let's do an L1-Trend filter model. So we are going to 
+Ok, now let's do an L1 trend filter model. So we are going to 
 penalize any non-zero second derivative with an L1 norm. As we 
 probably know, L1 norms induce sparseness. So the second dervative at 
-most of the points will b exactly zero but will probably be non-zero
-at a few of them. Thus, we exactly piecewise linear trends that 
+most of the points will be exactly zero but will probably be non-zero
+at a few of them. Thus, we expect piecewise linear trends that 
 occasionally have sudden slope changes.
 
 ```
@@ -68,7 +68,7 @@ y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_1=0.2, monotonic=True)
 
 Now let's increase the regularization parameter to give a higher
 penalty to slope changes. It results in longer trends. Fewer slope
-changes.
+changes. Overall, less complexity.
 
 ```
 y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_1=2.0)
@@ -91,9 +91,9 @@ y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_0=8.0)
 
 
 Let's do L2 norms for regularization on the second 
-derivative. L2 norms don't care to much about small values. 
+derivative. L2 norms don't care very much about small values. 
 They don't force them all the way to zero to create sparse 
-solution. Cares more about big values. This results is a 
+solution. They care more about big values. This results is a 
 smooth continuous curve. This is a nice way of doing robust 
 smoothing. 
 
@@ -126,8 +126,9 @@ def trend_filter(x, y, y_err=None, alpha_2=0.0,
                  return_function=False):
 ```
 
-So you see there are alpha key-words for regularization. 
+So you see there are alpha key-words for regularization parameters. 
 The number n, tells you the n+1 derivative is being penalized.
+You can use any, all or none of them. The key-word
 l_norm gives you the choice of 1 or 2. Monotonic and 
 constrain_zero, we've explained already. 
 
@@ -137,8 +138,16 @@ function of the model to apply to some other x values.
 
 We didn't discuss y_err. That's the uncertainty on y. The
 default is 1. The Huber loss is actually applied to (data-model)/y_err.
-So, you can weight points differently if you have a good reason,
-such as knowing the actual error values.
+So, you can weight points differently if you have a good reason to,
+such as knowing the actual error values or knowing that some points 
+are dubious or if some points are known exactly. That would be the limit
+as y_err goes towards zero and it will make the curve go through those
+points.
+
+All in all, these keywords give you a huge amount of freedom in
+what you want your model to look like. 
+
+Enjoy!
 
 
 
