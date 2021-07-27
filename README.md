@@ -27,13 +27,10 @@ for prep_data code and plotting code.
 
 First build the base model with no regularization. This is essentially
 just an overly complex way of constructing an interpolation function. 
-If you use the keyword return_function, it returns an actual 
-function which in interpolation of the model. Without that, 
-it return an array, evaluated at the set of x points. 
 
 ```
 x, y_noisy = prep_data()
-y_fit = trend_filter(x, y_noisy)
+result = trend_filter(x, y_noisy)
 ```
 
 ![BaseModel](./plots/bokeh_plot_base_model_no_reg.png)
@@ -54,7 +51,7 @@ We use Huber loss because it is robust to outliers while still
 looking like quadratic loss for small values.
 
 ```
-y_fit = trend_filter(x, y_noisy, monotonic=True)
+result = trend_filter(x, y_noisy, monotonic=True)
 ```
 
 ![MonoModel](./plots/bokeh_plot_best_mono.png)
@@ -71,7 +68,7 @@ at a few of them. Thus, we expect piecewise linear trends that
 occasionally have sudden slope changes.
 
 ```
-y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_2=0.2)
+result = trend_filter(x, y_noisy, l_norm=1, alpha_2=0.2)
 ```
 
 ![L1TF](./plots/bokeh_plot_l1_trend_filter.png)
@@ -79,7 +76,7 @@ y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_2=0.2)
 Let's do the same thing but enforce it to be monotonic.
 
 ```
-y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_2=0.2, monotonic=True)
+result = trend_filter(x, y_noisy, l_norm=1, alpha_2=0.2, monotonic=True)
 ```
 
 ![L1TFMono](./plots/bokeh_plot_l1_trend_filter_mono.png)
@@ -90,7 +87,7 @@ penalty to slope changes. It results in longer trends. Fewer slope
 changes. Overall, less complexity.
 
 ```
-y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_2=2.0)
+result = trend_filter(x, y_noisy, l_norm=1, alpha_2=2.0)
 ```
 
 ![L1TFMoreReg](./plots/bokeh_plot_l1_trend_filter_more_reg.png)
@@ -104,7 +101,7 @@ did so. Let's also constrain the curve to go through the origin,
 (0,0).
 
 ```
-y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_1=1.0, constrain_zero=True)
+result = trend_filter(x, y_noisy, l_norm=1, alpha_1=1.0, constrain_zero=True)
 ```
 
 ![L1TFSteps](./plots/bokeh_plot_stair_steps.png)
@@ -118,7 +115,7 @@ smooth continuous curve. This is a nice way of doing robust
 smoothing. 
 
 ```
-y_fit = trend_filter(x, y_noisy, l_norm=2, alpha_2=2.0)
+result = trend_filter(x, y_noisy, l_norm=2, alpha_2=2.0)
 ```
 
 ![L2TF](./plots/bokeh_plot_l2_smooth.png)
@@ -145,8 +142,9 @@ The data structure returned by trend_filter is a dictionary with various
 pieces of information about the model. The most import are 
 'y_fit' which is an array of best fit model values corresponding to 
 each point x. The 'function' element is a function mapping any x to the
-model value, including points outside the initial range. These will be
-extrapolated linearly.
+model value, including points outside the initial range. These external 
+points will be extrapolated linearly. In the case that the data is a 
+time-series, this function can provide forecasts for the future.
 
 We didn't discuss y_err. That's the uncertainty on y. The
 default is 1. The Huber loss is actually applied to (data-model)/y_err.
