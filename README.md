@@ -73,7 +73,7 @@ at a few of them. Thus, we expect piecewise linear trends that
 occasionally have sudden slope changes.
 
 ```
-y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_1=0.2)
+y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_2=0.2)
 ```
 
 ![L1TF](./plots/bokeh_plot_l1_trend_filter.png)
@@ -81,7 +81,7 @@ y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_1=0.2)
 Let's do the same thing but enforce it to be monotonic.
 
 ```
-y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_1=0.2, monotonic=True)
+y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_2=0.2, monotonic=True)
 ```
 
 ![L1TFMono](./plots/bokeh_plot_l1_trend_filter_mono.png)
@@ -92,20 +92,21 @@ penalty to slope changes. It results in longer trends. Fewer slope
 changes. Overall, less complexity.
 
 ```
-y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_1=2.0)
+y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_2=2.0)
 ```
 
 ![L1TFMoreReg](./plots/bokeh_plot_l1_trend_filter_more_reg.png)
 
 
 Did you like the stair steps? Let's do that again. But now
-we will not force it to be monotonic. We are going to put an 
+we will not force it to be monotonic. We are going to put an
 L1 norm on the first derivative. This produces a similar 
 output but it could actually decrease if the data actually
-did so. 
+did so. Let's also constrain the curve to go through the origin, 
+(0,0).
 
 ```
-y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_0=8.0)
+y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_1=1.0, constrain_zero=True)
 ```
 
 ![L1TFSteps](./plots/bokeh_plot_stair_steps.png)
@@ -119,43 +120,35 @@ smooth continuous curve. This is a nice way of doing robust
 smoothing. 
 
 ```
-y_fit = trend_filter(x, y_noisy, l_norm=2, alpha_1=1.0)
+y_fit = trend_filter(x, y_noisy, l_norm=2, alpha_2=2.0)
 ```
 
-![L2TF](./plots/bokeh_plot_l2_trend_filter.png)
-
-Let's use L1 norm again but put it on the 3rd derivative. 
-This will result in sparse changes in second derivative. So
-locally things will be quadratic but with sparse changes. 
-
-We also have a key-word to constraint the function to pass 
-through the origin, (0,0).
-
-```
-y_fit = trend_filter(x, y_noisy, l_norm=1, alpha_2=3.0, constrain_zero=True)
-```
-
-![L2PWQ](./plots/bokeh_plot_piecewise_quadratic_constrain_zero.png)
+![L2TF](./plots/bokeh_plot_l2_smooth.png)
 
 
 Here is the full function signature.
 
 ```
-def trend_filter(x, y, y_err=None, alpha_2=0.0,
-                 alpha_1=0.0, alpha_0=0.0, l_norm=2,
+def trend_filter(x, y, y_err=None, alpha_1=0.0,
+                 alpha_2=0.0, l_norm=2,
                  constrain_zero=False, monotonic=False,
-                 return_function=False):
+                 positive=False,
+                 linear_deviations=None):
 ```
 
 So you see there are alpha key-words for regularization parameters. 
-The number n, tells you the n+1 derivative is being penalized.
+The number n, tells you the derivative is being penalized.
 You can use any, all or none of them. The key-word
 l_norm gives you the choice of 1 or 2. Monotonic and 
-constrain_zero, we've explained already. 
+constrain_zero, we've explained already. positive forces the 
+base model to be positive. linear_deviations will be explained in a bit.
 
-The return_function allows you to get either the model at 
-the points in an array (default) or the interpolating 
-function of the model to apply to some other x values. 
+The data structure returned by trend_filter is a dictionary with various
+pieces of information about the model. The most import are 
+'y_fit' which is an array of best fit model values corresponding to 
+each point x. The 'function' element is a function mapping any x to the
+model value, including points outside the initial range. These will be
+extrapolated linearly.
 
 We didn't discuss y_err. That's the uncertainty on y. The
 default is 1. The Huber loss is actually applied to (data-model)/y_err.
@@ -166,7 +159,7 @@ as y_err goes towards zero and it will make the curve go through those
 points.
 
 All in all, these keywords give you a huge amount of freedom in
-what you want your model to look like. 
+what you want your model to look like.
 
 Enjoy!
 

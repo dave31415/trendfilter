@@ -46,12 +46,7 @@ def plot_model(title, **kwargs):
 
     plot.line(x, y_fit, color='red')
 
-    # create an interpolation function for the model
-    # can also just give it return_function=True
-    # and get back the interpolation function instead of the
-    # model evaluated at points
-
-    f = interp1d(x, y_fit, fill_value="extrapolate")
+    f = result['function']
 
     # over-plot the function, showing the extrapolation too
     xx = np.linspace(x.min() - 1, x.max() + 2, 500)
