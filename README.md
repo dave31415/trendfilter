@@ -1,11 +1,11 @@
 # trendfilter: 
 
-Trend filtering is about building a model for a 1D time series
-that has some nice properties such as smoothness or sparse 
-changes in slopes (piecewise linear).
+Trend filtering is about building a model for a 1D function
+(could be a time series) that has some nice properties such as 
+smoothness or sparse changes in slopes (piecewise linear).
 
 The objective to be minimized is, in our case, Huber loss with
-regularization on 1st, 2nd or 3rd derivative plus some constraints. 
+regularization on 1st and 2nd derivative plus some constraints. 
 Can be either L1 or L2 norms for regularization.
 
 This library provides a flexible and powerful 
@@ -18,13 +18,11 @@ pip install trendfilter
 
 or clone the repo. 
 
-# Examples: 
-
-(TODO: update this)
+# Examples:
 
 Contruct some x, y data where there is noise as well as few 
 outliers. See 
-[test file](https://github.com/dave31415/trendfilter/blob/master/test/test_mono.py)
+[test file](https://github.com/dave31415/trendfilter/blob/master/test/test_tf.py)
 for prep_data code and plotting code.
 
 First build the base model with no regularization. This is essentially
