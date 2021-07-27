@@ -20,6 +20,8 @@ or clone the repo.
 
 # Examples: 
 
+(TODO: update this)
+
 Contruct some x, y data where there is noise as well as few 
 outliers. See 
 [test file](https://github.com/dave31415/trendfilter/blob/master/test/test_mono.py)

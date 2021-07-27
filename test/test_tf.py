@@ -75,40 +75,34 @@ def test_base():
 def test_mono():
     title = 'Best monotonic increasing function'
     obj = plot_model(title, monotonic=True)
-    assert abs(obj - 10.400256528432992) < tolerance
+    assert abs(obj - 10.39020002241298) < tolerance
 
 
 def test_l1_trend_filter():
     title = 'L1 Trend Filter Model'
-    obj = plot_model(title, l_norm=1, alpha_1=0.2)
-    assert abs(obj - 12.08133969150458) < tolerance
+    obj = plot_model(title, l_norm=1, alpha_2=0.2)
+    assert abs(obj - 12.045109020871877) < tolerance
 
 
 def test_l1_trend_filter_mono():
     title = 'L1 Trend Filter Model, Monotonic'
-    obj = plot_model(title, l_norm=1, alpha_1=0.2, monotonic=True)
-    assert abs(obj - 12.089230783933875) < tolerance
+    obj = plot_model(title, l_norm=1, alpha_2=0.2, monotonic=True)
+    assert abs(obj - 12.052960090588234) < tolerance
 
 
 def test_l1_trend_filter_more_reg():
     title = 'L1 Trend Filter Model, More regularization'
-    obj = plot_model(title, l_norm=1, alpha_1=2.0)
-    assert abs(obj - 13.50836968209871) < tolerance
+    obj = plot_model(title, l_norm=1, alpha_2=2.0)
+    assert abs(obj - 13.16869494642045) < tolerance
 
 
 def test_l1_trend_filter_steps():
-    title = 'L1 Trend Filter Model, Stair steps'
-    obj = plot_model(title, l_norm=1, alpha_0=8.0)
-    assert abs(obj - 33.93258153622371) < tolerance
+    title = 'L1 Trend Filter Model, Stair steps, Constrain zero'
+    obj = plot_model(title, l_norm=1, alpha_1=1.0, constrain_zero=True)
+    assert abs(obj - 33.64932708644826) < tolerance
 
 
-def test_l2_smooth():
-    title = 'L2 Trend Filter Model, Smooth'
-    obj = plot_model(title, l_norm=2, alpha_1=1.0)
-    assert abs(obj - 11.835834605224099) < tolerance
-
-
-def test_l1_piecewise_quadratic():
-    title = 'L1 Trend Filter Model, Piecewise quadratic, constrain zero'
-    obj = plot_model(title, l_norm=1, alpha_2=3.0, constrain_zero=True)
-    assert abs(obj - 13.90828179114642) < tolerance
+def test_smooth():
+    title = 'L2 Smooth'
+    obj = plot_model(title, l_norm=2, alpha_2=2.0)
+    assert abs(obj - 11.971096302251315) < tolerance
