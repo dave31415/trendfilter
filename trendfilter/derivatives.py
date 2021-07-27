@@ -15,7 +15,7 @@ def first_derivative_matrix(n):
     :return: a sparse matrix that applies the derivative operator
              to a numpy array or list to yield a numpy array
     """
-    e = np.mat(np.ones((1, n)))
+    e = np.ones((1, n))
     return spdiags(np.vstack((-1*e, e)), range(2), n-1, n)
 
 
@@ -37,7 +37,7 @@ def second_derivative_matrix(n):
     :return: a sparse matrix that applies the second derivative operator
              to a numpy array or list to yield a numpy array
     """
-    e = np.mat(np.ones((1, n)))
+    e = np.ones((1, n))
     return spdiags(np.vstack((e, -2*e, e)), range(3), n-2, n)
 
 
@@ -109,7 +109,7 @@ def first_derv_nes(x, y):
     ep = 1e-9
     idx = 1.0 / (x[1:] - x[0:-1] + ep)
     matrix = first_derivative_matrix(n)
-    return idx * (matrix * y)
+    return idx * (matrix @ y)
 
 
 def first_derv_nes_cvxpy(x, y):
@@ -117,4 +117,14 @@ def first_derv_nes_cvxpy(x, y):
     ep = 1e-9
     idx = 1.0 / (x[1:] - x[0:-1] + ep)
     matrix = first_derivative_matrix(n)
-    return cvxpy.multiply(idx, matrix * y)
+    return cvxpy.multiply(idx, matrix @ y)
+
+
+def cumulative_matrix(n):
+    """
+    Matrix of nxn dimension that when multiplied with a vector
+        results in the cumulative sum
+    :param n: dimension
+    :return: cumulative sum matrix
+    """
+    return np.tril(np.ones((n, n)))

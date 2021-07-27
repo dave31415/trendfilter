@@ -7,6 +7,7 @@ from tempfile import NamedTemporaryFile
 from numpy import ndarray
 
 show_plot = True
+tolerance = 1/(10**8)
 
 
 def prep_data():
@@ -34,8 +35,9 @@ def plot_model(title, **kwargs):
     x, y_noisy = prep_data()
 
     # fit a monotonic increasing function
-    y_fit = trend_filter(x, y_noisy, **kwargs)
 
+    result = trend_filter(x, y_noisy, **kwargs)
+    y_fit = result['y_fit']
     assert isinstance(y_fit, ndarray)
 
     plot = figure(title=title)
@@ -58,42 +60,55 @@ def plot_model(title, **kwargs):
     if show_plot:
         show(plot)
 
+    obj = result['objective_total'].value
+    print('objective %s, %s' % (obj, title))
+
+    return obj
+
 
 def test_base():
     title = 'Base model, no regularization'
-    plot_model(title)
+    obj = plot_model(title)
+    assert obj < tolerance
 
 
 def test_mono():
     title = 'Best monotonic increasing function'
-    plot_model(title, monotonic=True)
+    obj = plot_model(title, monotonic=True)
+    assert abs(obj - 10.400256528432992) < tolerance
 
 
 def test_l1_trend_filter():
     title = 'L1 Trend Filter Model'
-    plot_model(title, l_norm=1, alpha_1=0.2)
+    obj = plot_model(title, l_norm=1, alpha_1=0.2)
+    assert abs(obj - 12.08133969150458) < tolerance
 
 
 def test_l1_trend_filter_mono():
     title = 'L1 Trend Filter Model, Monotonic'
-    plot_model(title, l_norm=1, alpha_1=0.2, monotonic=True)
+    obj = plot_model(title, l_norm=1, alpha_1=0.2, monotonic=True)
+    assert abs(obj - 12.089230783933875) < tolerance
 
 
 def test_l1_trend_filter_more_reg():
     title = 'L1 Trend Filter Model, More regularization'
-    plot_model(title, l_norm=1, alpha_1=2.0)
+    obj = plot_model(title, l_norm=1, alpha_1=2.0)
+    assert abs(obj - 13.50836968209871) < tolerance
 
 
 def test_l1_trend_filter_steps():
     title = 'L1 Trend Filter Model, Stair steps'
-    plot_model(title, l_norm=1, alpha_0=8.0)
+    obj = plot_model(title, l_norm=1, alpha_0=8.0)
+    assert abs(obj - 33.93258153622371) < tolerance
 
 
 def test_l2_smooth():
     title = 'L2 Trend Filter Model, Smooth'
-    plot_model(title, l_norm=2, alpha_1=1.0)
+    obj = plot_model(title, l_norm=2, alpha_1=1.0)
+    assert abs(obj - 11.835834605224099) < tolerance
 
 
 def test_l1_piecewise_quadratic():
     title = 'L1 Trend Filter Model, Piecewise quadratic, constrain zero'
-    plot_model(title, l_norm=1, alpha_2=3.0, constrain_zero=True)
+    obj = plot_model(title, l_norm=1, alpha_2=3.0, constrain_zero=True)
+    assert abs(obj - 13.90828179114642) < tolerance
