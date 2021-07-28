@@ -29,10 +29,10 @@ def plot_model(result, title='', file=None, show_base=False, show_extrap=False,
                   y_range=(plot_y_min, plot_y_max),
                   x_range=(plot_x_min, plot_x_max))
 
-    plot.circle(x, y, legend='data')
+    plot.circle(x, y, legend_label='data')
     plot.line(x, y)
 
-    plot.line(x, result['y_fit'], color='red', legend='model')
+    plot.line(x, result['y_fit'], color='red', legend_label='model')
 
     if show_extrap:
         # over-plot the function, showing the extrapolation too
@@ -40,7 +40,7 @@ def plot_model(result, title='', file=None, show_base=False, show_extrap=False,
         x_min = max(x) + extrap_min
         x_max = max(x) + extrap_max
         xx = np.arange(x_min, x_max, extrap_stride)
-        plot.line(xx, f(xx), color='green', legend='model extrapolation')
+        plot.line(xx, f(xx), color='green', legend_label='model extrapolation')
 
     if show_base:
         f_base = result['function_base']
@@ -49,7 +49,7 @@ def plot_model(result, title='', file=None, show_base=False, show_extrap=False,
             x_max += extrap_max
 
         xxx = np.arange(x.min(), x_max)
-        plot.line(xxx, f_base(xxx), color='black', legend='base model')
+        plot.line(xxx, f_base(xxx), color='black', legend_label='base model')
 
     if show_plot:
         show(plot)

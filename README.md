@@ -3,7 +3,8 @@
 Trend filtering is about building a model for a 1D function
 (could be a time series) that has some nice properties such as 
 smoothness or sparse changes in slopes (piecewise linear). It can
-also incorporate other features such as seasonality.
+also incorporate other features such as seasonality and can be 
+made very robust to ourtliers and other data corruption features.
 
 Here's a visual example
 
@@ -55,8 +56,12 @@ First build the base model with no regularization. This is essentially
 just an overly complex way of constructing an interpolation function. 
 
 ```
-x, y_noisy = prep_data()
+from trendfilter import trend_filter, get_example_data, plot_model
+
+x, y_noisy = get_example_data()
 result = trend_filter(x, y_noisy)
+title = 'Base model, no regularization'
+plot_model(result, title=title)
 ```
 
 ![BaseModel](./plots/bokeh_plot_base_model_no_reg.png)
@@ -78,6 +83,7 @@ looking like quadratic loss for small values.
 
 ```
 result = trend_filter(x, y_noisy, monotonic=True)
+plot_model(result, show_extrap=True, extrap_max=3)
 ```
 
 ![MonoModel](./plots/bokeh_plot_best_mono.png)
@@ -95,6 +101,7 @@ occasionally have sudden slope changes.
 
 ```
 result = trend_filter(x, y_noisy, l_norm=1, alpha_2=0.2)
+plot_model(result, show_extrap=True, extrap_max=3)
 ```
 
 ![L1TF](./plots/bokeh_plot_l1_trend_filter.png)
@@ -103,6 +110,7 @@ Let's do the same thing but enforce it to be monotonic.
 
 ```
 result = trend_filter(x, y_noisy, l_norm=1, alpha_2=0.2, monotonic=True)
+plot_model(result, show_extrap=True, extrap_max=3)
 ```
 
 ![L1TFMono](./plots/bokeh_plot_l1_trend_filter_mono.png)
@@ -114,6 +122,7 @@ changes. Overall, less complexity.
 
 ```
 result = trend_filter(x, y_noisy, l_norm=1, alpha_2=2.0)
+plot_model(result, show_extrap=True, extrap_max=3)
 ```
 
 ![L1TFMoreReg](./plots/bokeh_plot_l1_trend_filter_more_reg.png)
@@ -128,6 +137,7 @@ did so. Let's also constrain the curve to go through the origin,
 
 ```
 result = trend_filter(x, y_noisy, l_norm=1, alpha_1=1.0, constrain_zero=True)
+plot_model(result, show_extrap=True, extrap_max=3)
 ```
 
 ![L1TFSteps](./plots/bokeh_plot_stair_steps.png)
@@ -142,6 +152,7 @@ smoothing.
 
 ```
 result = trend_filter(x, y_noisy, l_norm=2, alpha_2=2.0)
+plot_model(result, show_extrap=True, extrap_max=3)
 ```
 
 ![L2TF](./plots/bokeh_plot_l2_smooth.png)
@@ -215,6 +226,7 @@ Now just call it like this.
 ```
 linear_deviations = [linear_deviation]
 result = trend_filter(x, y_noisy, l_norm=1, alpha_2=4.0, linear_deviations=linear_deviations)
+plot_model(result, title=title, show_extrap=True, extrap_max=3)
 ```
 
 Note that you input it as a list if linear deviations. You can include
@@ -228,7 +240,11 @@ We've created another data set with some seasonal pattern added.
 This is how it looks when the model is run without seasonality.
 
 ```
+from trendfilter import get_example_data_seasonal()
+
+x, y_noisy = get_example_data_seasonal()
 result = trend_filter(x, y_noisy,  l_norm=1, alpha_2=4.0)
+plot_model(result, show_extrap=True, extrap_max=40)
 ```
 
 ![L2TF](./plots/bokeh_plot_without_seasonal.png)
@@ -243,6 +259,7 @@ actually model it using the structure we created above.
 
 ```
 result = trend_filter(x, y_noisy, l_norm=1, alpha_2=4.0, linear_deviations=linear_deviations)
+plot_model(result, show_extrap=True, extrap_max=40, show_base=True)
 ```
 
 ![L2TF](./plots/bokeh_plot_with_seasonal.png)
