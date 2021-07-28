@@ -86,7 +86,10 @@ def trend_filter(x, y, y_err=None, alpha_1=0.0,
     func_base, func_deviates, func = \
         get_interp_extrapolate_functions(x, result['base_model'], linear_deviations)
 
-    tf_result = {'function': func,
+    tf_result = {'x': x,
+                 'y': y,
+                 'y_err': y_err,
+                 'function': func,
                  'function_base': func_base,
                  'function_deviates': func_deviates,
                  'model': result['model'],
@@ -96,7 +99,8 @@ def trend_filter(x, y, y_err=None, alpha_1=0.0,
                  'regularizations': regs,
                  'objective_total': obj,
                  'y_fit': result['model'].value,
-                 'constraints': constraints}
+                 'constraints': constraints,
+                 'linear_deviations': linear_deviations}
 
     return tf_result
 

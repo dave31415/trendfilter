@@ -29,6 +29,8 @@ def get_interp_extrapolate_functions(x, base_model, linear_deviations):
     :param linear_deviations: list of completed linear_deviations objects
     :return:  base function, deviates function, total model function
     """
+
+    # TODO: this requires mapping to be given, make it work with matrix only
     interp_base_model_func = interp1d(x, base_model.value, fill_value="extrapolate")
 
     def func_base(x_new):

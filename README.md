@@ -157,7 +157,78 @@ points.
 All in all, these keywords give you a huge amount of freedom in
 what you want your model to look like.
 
-Enjoy!
+# Linear model deviations and seasonality:
 
+Any time series library should include ways of modeling seasonality and 
+this one does as well. In fact, it includes something more general which is
+the ability to add in any linear features to the model. 
+This linearity preserves convexity and so we can still use cvxpy. 
+By linear deviation we means any addition to the model that is a specified
+matrix multiplied by a variable vector. That variable vector can be solved
+for as well. 
 
+To do this you create a data structure called linear deviations
 
+```
+linear_deviation = {'mapping': lambda x: x % 12,
+                    'name': 'seasonal_term',
+                    'n_vars': 12,
+                    'alpha': 0.1}
+```
+
+This assumes the matrix above is an assignment matrix. You can also create
+a matrix yourself and include that as 'matrix' instead of 'mapping'. 
+
+This provides a mapping from x to some set of integer indices. You tell
+it there are 12 of them. One for each month of the year. We can give it a 
+name 'seasonal_term' and a regularization parameter. Evidently, we are
+going to use this on a monthly time series. 
+
+Now just call it like this.
+
+```
+linear_deviations = [linear_deviation]
+result = trend_filter(x, y_noisy, l_norm=1, alpha_2=4.0, linear_deviations=linear_deviations)
+```
+
+Note that you input it as a list if linear deviations. You can include
+multiple. Perhaps for example, you have one that marks months for which
+the kids are in school or months where there was a convention 
+in town.
+
+Let's see it in action.
+
+We've created another data set with some seasonal pattern added.
+This is how it looks when the model is run without seasonality.
+
+```
+result = trend_filter(x, y_noisy,  l_norm=1, alpha_2=4.0)
+```
+
+![L2TF](./plots/bokeh_plot_without_seasonal.png)
+
+In this case the model is just trying to model all the wiggles
+with a changing trend. This doesn't produce a very 
+convincing looking forecast. We can improve that some and iron
+out the wiggles by using a higher alpha_2.
+
+But if we notice there is some periodicity to it, we can 
+actually model it using the structure we created above.
+
+```
+result = trend_filter(x, y_noisy, l_norm=1, alpha_2=4.0, linear_deviations=linear_deviations)
+```
+
+![L2TF](./plots/bokeh_plot_with_seasonal.png)
+
+Now, we can see that there is indeed a prominant seasonal
+pattern on top of a rather smooth base model. The forecast 
+now will include that same seasonal pattern which should 
+lead to a more accurate forecast.
+
+The 'alpha' regularization determines the amount of evidence required
+to make use of the seasonal component. For a larger alpha and the same 
+pattern here, it will take more cycles before it will overcome the barrier.
+At this point the total objective is lower than trying to model the 
+wiggles with slope changes or tolerating a difference between model and 
+data.

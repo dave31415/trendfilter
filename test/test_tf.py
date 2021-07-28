@@ -5,13 +5,13 @@ from tempfile import NamedTemporaryFile
 from numpy import ndarray
 from trendfilter import trend_filter
 from trendfilter.get_example_data import get_example_data
-
+from trendfilter.plot_model import plot_model
 
 show_plot = True
 tolerance = 1/(10**8)
 
 
-def plot_model(x, y_noisy, title, **kwargs):
+def plot_model_dep(x, y_noisy, title, **kwargs):
     file = NamedTemporaryFile().name+'.html'
     output_file(file)
 
@@ -45,47 +45,61 @@ def plot_model(x, y_noisy, title, **kwargs):
 def test_base():
     x, y_noisy = get_example_data()
     title = 'Base model, no regularization'
-    obj = plot_model(x, y_noisy, title)
+    result = trend_filter(x, y_noisy)
+    plot_model(result, title=title)
+    obj = result['objective_total'].value
     assert obj < tolerance
 
 
 def test_mono():
     x, y_noisy = get_example_data()
     title = 'Best monotonic increasing function'
-    obj = plot_model(x, y_noisy,title, monotonic=True)
+    result = trend_filter(x, y_noisy, monotonic=True)
+    plot_model(result, title=title, show_extrap=True, extrap_max=3)
+    obj = result['objective_total'].value
     assert abs(obj - 10.39020002241298) < tolerance
 
 
 def test_l1_trend_filter():
     x, y_noisy = get_example_data()
     title = 'L1 Trend Filter Model'
-    obj = plot_model(x, y_noisy, title, l_norm=1, alpha_2=0.2)
+    result = trend_filter(x, y_noisy, l_norm=1, alpha_2=0.2)
+    plot_model(result, title=title, show_extrap=True, extrap_max=3)
+    obj = result['objective_total'].value
     assert abs(obj - 12.045109020871877) < tolerance
 
 
 def test_l1_trend_filter_mono():
     x, y_noisy = get_example_data()
     title = 'L1 Trend Filter Model, Monotonic'
-    obj = plot_model(x, y_noisy, title, l_norm=1, alpha_2=0.2, monotonic=True)
+    result = trend_filter(x, y_noisy, l_norm=1, alpha_2=0.2, monotonic=True)
+    plot_model(result, title=title, show_extrap=True, extrap_max=3)
+    obj = result['objective_total'].value
     assert abs(obj - 12.052960090588234) < tolerance
 
 
 def test_l1_trend_filter_more_reg():
     x, y_noisy = get_example_data()
     title = 'L1 Trend Filter Model, More regularization'
-    obj = plot_model(x, y_noisy, title, l_norm=1, alpha_2=2.0)
+    result = trend_filter(x, y_noisy,  l_norm=1, alpha_2=2.0)
+    plot_model(result, title=title, show_extrap=True, extrap_max=3)
+    obj = result['objective_total'].value
     assert abs(obj - 13.16869494642045) < tolerance
 
 
 def test_l1_trend_filter_steps():
     x, y_noisy = get_example_data()
     title = 'L1 Trend Filter Model, Stair steps, Constrain zero'
-    obj = plot_model(x, y_noisy, title, l_norm=1, alpha_1=1.0, constrain_zero=True)
+    result = trend_filter(x, y_noisy, l_norm=1, alpha_1=1.0, constrain_zero=True)
+    plot_model(result, title=title, show_extrap=True, extrap_max=3)
+    obj = result['objective_total'].value
     assert abs(obj - 33.64932708644826) < tolerance
 
 
 def test_smooth():
     x, y_noisy = get_example_data()
     title = 'L2 Smooth'
-    obj = plot_model(x, y_noisy, title, l_norm=2, alpha_2=2.0)
+    result = trend_filter(x, y_noisy, l_norm=2, alpha_2=2.0)
+    plot_model(result, title=title, show_extrap=True, extrap_max=3)
+    obj = result['objective_total'].value
     assert abs(obj - 11.971096302251315) < tolerance
