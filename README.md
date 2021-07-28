@@ -2,15 +2,41 @@
 
 Trend filtering is about building a model for a 1D function
 (could be a time series) that has some nice properties such as 
-smoothness or sparse changes in slopes (piecewise linear).
+smoothness or sparse changes in slopes (piecewise linear). It can
+also incorporate other features such as seasonality.
+
+Here's a visual example
+
+![L1TFMono](./plots/bokeh_plot_l1_trend_filter_mono.png)
+
 
 The objective to be minimized is, in our case, Huber loss with
 regularization on 1st and 2nd derivative plus some constraints. 
 Can be either L1 or L2 norms for regularization.
 
-This library provides a flexible and powerful 
-python function to do this and is built on top of the 
-cvxpy optimization library.
+This library provides a flexible and powerful python function to 
+do trend filtering and is built on top of the cvxpy optimization library.
+
+Trend filtering is very useful on typical data science problems we
+that we commonly run into in the business world. These types of 
+data series are typically not very large and low signal-to-noise. An
+example might be monthly sales of one type of product. 
+
+Unlike high signal-to-noise data, that is 
+often treated with other time-series techniques, thee main desire
+is finding the most recent trend and extrapolating forward a bit. The
+biggest problem is data quality issues. So we want to do this as 
+robustly as possible. It's also quite useful when we want to include
+the data corruption as part of the model and extract it at the same 
+time instead of requiring a pre-processing step with some arbitrary 
+rules.
+
+This is what this technique is best utilized for.
+Larger, richer data sets (e.g. medical EKG data) with thousands 
+or millions of points, low noise and no outliers, might be
+better approached with other techniques that focus most of all on 
+extracting the full complexity of the signal from a small amount of
+noise.
 
 # Install
 
