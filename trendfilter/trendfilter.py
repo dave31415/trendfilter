@@ -1,6 +1,6 @@
 import numpy as np
 import cvxpy
-from scipy.interpolate import interp1d
+from trendfilter.extrapolate import get_interp_extrapolate_functions
 from trendfilter.derivatives import second_derivative_matrix_nes, \
     first_derv_nes_cvxpy
 from trendfilter.linear_deviations import complete_linear_deviations
@@ -83,8 +83,12 @@ def trend_filter(x, y, y_err=None, alpha_1=0.0,
     # return the model fit values
     y_fit = result['model'].value
 
-    tf_result = {#'function': interp1d(x, y_fit, fill_value="extrapolate"),
-                 'function': get_interp_extrapolate_function(x, y_fit, result['base_model'], linear_deviations),
+    func_base, func_deviates, func = \
+        get_interp_extrapolate_functions(x, result['base_model'], linear_deviations)
+
+    tf_result = {'function': func,
+                 'function_base': func_base,
+                 'function_deviates': func_deviates,
                  'model': result['model'],
                  'base_model': result['base_model'],
                  'objective_model': result['objective_function'],
@@ -95,37 +99,6 @@ def trend_filter(x, y, y_err=None, alpha_1=0.0,
                  'constraints': constraints}
 
     return tf_result
-
-
-def get_interp_extrapolate_function(x, y_fit, base_model, linear_deviations):
-    interp_model_func = interp1d(x, y_fit, fill_value="extrapolate")
-
-    interp_base_model_func = interp1d(x, base_model.value, fill_value="extrapolate")
-
-    def func1(x_new):
-        if x.min() <= x_new <= x.max() and False:
-            return interp_model_func(x_new)
-
-        base_value = interp_base_model_func(x_new)
-        linear_dev_value = 0.0
-        for lin_dev in linear_deviations:
-            index = lin_dev['mapping'](x_new)
-            var = lin_dev['variable'].value
-            value = var[index]
-            linear_dev_value += value
-
-        return base_value + linear_dev_value
-
-    def func(x_new):
-        if isinstance(x_new, list):
-            return [func1(xx) for xx in x_new]
-
-        if isinstance(x_new, np.ndarray):
-            return np.array([func1(xx) for xx in x_new])
-
-        return func1(x_new)
-
-    return func
 
 
 def get_reg(x, base_model, derv_1, l_norm, alpha_1, alpha_2, linear_deviations=None):
