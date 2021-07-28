@@ -5,3 +5,6 @@ Added more examples with more documentation and plots in the Readme
 
 0.1.5
 Mostly a refactor but changed API slightly.
+
+0.2.0
+Includes seasonality and linear deviations.
