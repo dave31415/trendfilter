@@ -4,7 +4,7 @@ Trend filtering is about building a model for a 1D function
 (could be a time series) that has some nice properties such as 
 smoothness or sparse changes in slopes (piecewise linear). It can
 also incorporate other features such as seasonality and can be 
-made very robust to ourtliers and other data corruption features.
+made very robust to outliers and other data corruption features.
 
 Here's a visual example
 
