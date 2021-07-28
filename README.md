@@ -16,7 +16,8 @@ regularization on 1st and 2nd derivative plus some constraints.
 Can be either L1 or L2 norms for regularization.
 
 This library provides a flexible and powerful python function to 
-do trend filtering and is built on top of the cvxpy optimization library.
+do trend filtering and is built on top of the 
+convex optimization library cvxpy.
 
 Trend filtering is very useful on typical data science problems we
 that we commonly run into in the business world. These types of 
@@ -199,7 +200,8 @@ what you want your model to look like.
 Any time series library should include ways of modeling seasonality and 
 this one does as well. In fact, it includes something more general which is
 the ability to add in any linear features to the model. 
-This linearity preserves convexity and so we can still use cvxpy. 
+This linearity preserves convexity and so we can still use 
+convex optimization. 
 By linear deviation we means any addition to the model that is a specified
 matrix multiplied by a variable vector. That variable vector can be solved
 for as well. 
