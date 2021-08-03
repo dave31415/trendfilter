@@ -1,8 +1,3 @@
-import numpy as np
-from bokeh.plotting import figure, show
-from bokeh.io import output_file
-from tempfile import NamedTemporaryFile
-from numpy import ndarray
 from trendfilter import trend_filter
 from trendfilter.get_example_data import get_example_data_seasonal, deviation_mapping
 from trendfilter.plot_model import plot_model
@@ -19,7 +14,7 @@ def test_l1_trend_filter():
     plot_model(result, title=title, show_extrap=True, extrap_max=40)
     obj = result['objective_total'].value
     print('objective', obj, title)
-    assert abs(obj-44.42037415318625) < tolerance
+    assert abs(obj-44.412438967468475) < tolerance
 
 
 def test_with_seasonality():
@@ -38,4 +33,4 @@ def test_with_seasonality():
     plot_model(result, title=title, show_extrap=True, extrap_max=40, show_base=True)
     obj = result['objective_total'].value
     print('objective', obj, title)
-    assert abs(obj - 28.311789860224124) < tolerance
+    assert abs(obj - 28.308657555529226) < tolerance

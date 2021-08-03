@@ -209,7 +209,7 @@ for as well.
 To do this you create a data structure called linear deviations
 
 ```
-linear_deviation = {'mapping': lambda x: x % 12,
+linear_deviation = {'mapping': lambda x: int(x) % 12,
                     'name': 'seasonal_term',
                     'n_vars': 12,
                     'alpha': 0.1}
@@ -228,7 +228,6 @@ Now just call it like this.
 ```
 linear_deviations = [linear_deviation]
 result = trend_filter(x, y_noisy, l_norm=1, alpha_2=4.0, linear_deviations=linear_deviations)
-plot_model(result, title=title, show_extrap=True, extrap_max=3)
 ```
 
 Note that you input it as a list if linear deviations. You can include

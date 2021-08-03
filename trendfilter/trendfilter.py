@@ -10,7 +10,8 @@ def trend_filter(x, y, y_err=None, alpha_1=0.0,
                  alpha_2=0.0, l_norm=2,
                  constrain_zero=False, monotonic=False,
                  positive=False,
-                 linear_deviations=None):
+                 linear_deviations=None,
+                 solver='ECOS'):
     """
     :param x: The x-value, numpy array
     :param y: The y variable, numpy array
@@ -26,8 +27,10 @@ def trend_filter(x, y, y_err=None, alpha_1=0.0,
     :param monotonic: If set to True, will result in a monotonically
         increasing function. Default is False.
     :param positive: If set to True, base model will be positive.
-        Deafault False
+        Default False
     :param linear_deviations: list of linear deviation objects
+    :param solver: solver_name, check cvxpy.installed_solvers()
+        for list of installed solvers
     :return: The fit model information
     """
 
@@ -78,10 +81,7 @@ def trend_filter(x, y, y_err=None, alpha_1=0.0,
 
     # define and solve the problem
     problem = cvxpy.Problem(obj, constraints=constraints)
-    problem.solve()
-
-    # return the model fit values
-    y_fit = result['model'].value
+    problem.solve(solver=solver)
 
     func_base, func_deviates, func = \
         get_interp_extrapolate_functions(x, result['base_model'], linear_deviations)

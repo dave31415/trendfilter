@@ -8,3 +8,6 @@ Mostly a refactor but changed API slightly.
 
 0.2.0
 Includes seasonality and linear deviations.
+
+0.2.1
+Switched to ECOS solver
