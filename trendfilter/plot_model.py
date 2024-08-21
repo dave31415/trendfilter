@@ -2,6 +2,7 @@ from tempfile import NamedTemporaryFile
 from bokeh.plotting import figure, show
 from bokeh.io import output_file
 import numpy as np
+from trendfilter import bokeh_theme
 
 
 def plot_model(result, title='', file=None, show_base=False, show_extrap=False,

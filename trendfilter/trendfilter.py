@@ -4,6 +4,11 @@ from trendfilter.extrapolate import get_interp_extrapolate_functions
 from trendfilter.derivatives import second_derivative_matrix_nes, \
     first_derv_nes_cvxpy
 from trendfilter.linear_deviations import complete_linear_deviations
+from cvxpy import CLARABEL
+
+default_solver = CLARABEL
+# In newer versions of cvxpy, to use ECOS, need to install the ecos package
+# Clarabel is thew new built-in solver
 
 
 def trend_filter(x, y, y_err=None, alpha_1=0.0,
@@ -11,7 +16,7 @@ def trend_filter(x, y, y_err=None, alpha_1=0.0,
                  constrain_zero=False, monotonic=False,
                  positive=False,
                  linear_deviations=None,
-                 solver='ECOS'):
+                 solver=default_solver):
     """
     :param x: The x-value, numpy array
     :param y: The y variable, numpy array
@@ -34,6 +39,10 @@ def trend_filter(x, y, y_err=None, alpha_1=0.0,
     :return: The fit model information
     """
 
+    # ensure input is numpy array not list or tuple
+    x = np.array(x)
+    y = np.array(y)
+
     if linear_deviations is None:
         linear_deviations = []
 
@@ -53,9 +62,6 @@ def trend_filter(x, y, y_err=None, alpha_1=0.0,
     result = get_obj_func_model(y, y_err=y_err,
                                 positive=positive,
                                 linear_deviations=linear_deviations)
-
-    # TODO: this seems wrong
-    # y_var = result['objective_function'].variables()[0]
 
     derv_1 = first_derv_nes_cvxpy(x, result['base_model'])
 
@@ -159,7 +165,9 @@ def get_obj_func_model(y, y_err=None, positive=False, linear_deviations=None):
         y_err = np.ones(n)
     else:
         assert len(y_err) == n
+        y_err = np.array(y_err)
 
+    # prevent divide by zero with buffer
     buff = 0.01 * np.median(abs(y))
     buff_2 = buff ** 2
     isig = 1 / np.sqrt(buff_2 + y_err ** 2)

@@ -1,8 +1,3 @@
-import numpy as np
-from bokeh.plotting import figure, show
-from bokeh.io import output_file
-from tempfile import NamedTemporaryFile
-from numpy import ndarray
 from trendfilter import trend_filter
 from trendfilter.get_example_data import get_example_data
 from trendfilter.plot_model import plot_model
@@ -38,7 +33,8 @@ def test_l1_trend_filter():
     plot_model(result, title=title, show_extrap=True, extrap_max=3)
     obj = result['objective_total'].value
     print('objective %s, %s' % (obj, title))
-    assert abs(obj - 12.044960558386068) < tolerance
+    expected = 12.04496057242224
+    assert abs(obj - expected) < tolerance
 
 
 def test_l1_trend_filter_mono():

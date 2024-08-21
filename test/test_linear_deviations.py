@@ -32,5 +32,6 @@ def test_with_seasonality():
     result = trend_filter(x, y_noisy, l_norm=1, alpha_2=4.0, linear_deviations=linear_deviations)
     plot_model(result, title=title, show_extrap=True, extrap_max=40, show_base=True)
     obj = result['objective_total'].value
-    print('objective', obj, title)
-    assert abs(obj - 28.308657555529226) < tolerance
+    print('objective seasonal', obj, title)
+    expected = 28.30865759132078
+    assert abs(obj - expected) < tolerance
