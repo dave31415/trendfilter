@@ -6,4 +6,5 @@ build/
 dist/
 trendfilter.egg-info/
 trendfilter/__pycache__/
+token
 

@@ -11,6 +11,10 @@ Here's a visual example
 ![L1TFMono](./plots/bokeh_plot_l1_trend_filter_mono.png)
 
 
+![](https://raw.githubusercontent.com/dave31415/trendfilter/master/plots/bokeh_plot_l1_trend_filter_mono.png)
+
+
+
 The objective to be minimized is, in our case, Huber loss with
 regularization on 1st and 2nd derivative plus some constraints. 
 Can be either L1 or L2 norms for regularization.
