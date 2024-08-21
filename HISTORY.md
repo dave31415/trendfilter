@@ -15,3 +15,5 @@ Switched to ECOS solver
 0.3.0 
 Switched to Claribel solver which is the new built in solver
 Inputs now converted to numpy arrays so list inputs should work
+
+0.3.1 Fixing PyPi to show plots, use full URLs

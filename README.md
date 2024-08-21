@@ -8,11 +8,7 @@ made very robust to outliers and other data corruption features.
 
 Here's a visual example
 
-![L1TFMono](./plots/bokeh_plot_l1_trend_filter_mono.png)
-
-
 ![](https://raw.githubusercontent.com/dave31415/trendfilter/master/plots/bokeh_plot_l1_trend_filter_mono.png)
-
 
 
 The objective to be minimized is, in our case, Huber loss with
@@ -69,7 +65,7 @@ title = 'Base model, no regularization'
 plot_model(result, title=title)
 ```
 
-![BaseModel](./plots/bokeh_plot_base_model_no_reg.png)
+![](https://raw.githubusercontent.com/dave31415/trendfilter/master/plots/bokeh_plot_base_model_no_reg.png)
 
 This has no real use by itself. It's just saying the model is the
 same as the data points.
@@ -91,7 +87,7 @@ result = trend_filter(x, y_noisy, monotonic=True)
 plot_model(result, show_extrap=True, extrap_max=3)
 ```
 
-![MonoModel](./plots/bokeh_plot_best_mono.png)
+![](https://raw.githubusercontent.com/dave31415/trendfilter/master/plots/bokeh_plot_best_mono.png)
 
 The green line, by the way, just shows that the function can be extrapolated 
 which is a very useful thing, for example, if you want to make predictions
@@ -109,7 +105,7 @@ result = trend_filter(x, y_noisy, l_norm=1, alpha_2=0.2)
 plot_model(result, show_extrap=True, extrap_max=3)
 ```
 
-![L1TF](./plots/bokeh_plot_l1_trend_filter.png)
+![](https://raw.githubusercontent.com/dave31415/trendfilter/master/plots/bokeh_plot_l1_trend_filter.png)
 
 Let's do the same thing but enforce it to be monotonic.
 
@@ -118,7 +114,7 @@ result = trend_filter(x, y_noisy, l_norm=1, alpha_2=0.2, monotonic=True)
 plot_model(result, show_extrap=True, extrap_max=3)
 ```
 
-![L1TFMono](./plots/bokeh_plot_l1_trend_filter_mono.png)
+![](https://raw.githubusercontent.com/dave31415/trendfilter/master/plots/bokeh_plot_l1_trend_filter_mono.png)
 
 
 Now let's increase the regularization parameter to give a higher
@@ -130,7 +126,7 @@ result = trend_filter(x, y_noisy, l_norm=1, alpha_2=2.0)
 plot_model(result, show_extrap=True, extrap_max=3)
 ```
 
-![L1TFMoreReg](./plots/bokeh_plot_l1_trend_filter_more_reg.png)
+![](https://raw.githubusercontent.com/dave31415/trendfilter/master/plots/bokeh_plot_l1_trend_filter_more_reg.png)
 
 
 Did you like the stair steps? Let's do that again. But now
@@ -145,7 +141,7 @@ result = trend_filter(x, y_noisy, l_norm=1, alpha_1=1.0, constrain_zero=True)
 plot_model(result, show_extrap=True, extrap_max=3)
 ```
 
-![L1TFSteps](./plots/bokeh_plot_stair_steps.png)
+![](https://raw.githubusercontent.com/dave31415/trendfilter/master/plots/bokeh_plot_stair_steps.png)
 
 
 Let's do L2 norms for regularization on the second 
@@ -160,7 +156,7 @@ result = trend_filter(x, y_noisy, l_norm=2, alpha_2=2.0)
 plot_model(result, show_extrap=True, extrap_max=3)
 ```
 
-![L2TF](./plots/bokeh_plot_l2_smooth.png)
+![](https://raw.githubusercontent.com/dave31415/trendfilter/master/plots/bokeh_plot_l2_smooth.png)
 
 
 Here is the full function signature.
@@ -252,7 +248,7 @@ result = trend_filter(x, y_noisy,  l_norm=1, alpha_2=4.0)
 plot_model(result, show_extrap=True, extrap_max=40)
 ```
 
-![L2TF](./plots/bokeh_plot_without_seasonal.png)
+![](https://raw.githubusercontent.com/dave31415/trendfilter/master/plots/bokeh_plot_without_seasonal.png)
 
 In this case the model is just trying to model all the wiggles
 with a changing trend. This doesn't produce a very 
@@ -267,7 +263,7 @@ result = trend_filter(x, y_noisy, l_norm=1, alpha_2=4.0, linear_deviations=linea
 plot_model(result, show_extrap=True, extrap_max=40, show_base=True)
 ```
 
-![L2TF](./plots/bokeh_plot_with_seasonal.png)
+![](https://raw.githubusercontent.com/dave31415/trendfilter/master/plots/bokeh_plot_with_seasonal.png)
 
 Now, we can see that there is indeed a prominant seasonal
 pattern on top of a rather smooth base model. The forecast 
